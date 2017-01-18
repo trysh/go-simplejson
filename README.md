@@ -1,12 +1,13 @@
 ### go-simplejson
 
+本项目fork自github.com/bitly/go-simplejson
+
 a Go package to interact with arbitrary JSON
 
-[![Build Status](https://secure.travis-ci.org/bitly/go-simplejson.png)](http://travis-ci.org/bitly/go-simplejson)
 
 ### Importing
 
-    import github.com/bitly/go-simplejson
+    import github.com/trysh/go-simplejson
 
 ### Documentation
 
