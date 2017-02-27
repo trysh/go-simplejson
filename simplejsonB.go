@@ -34,6 +34,21 @@ func (j *Json) M() (map[string]interface{}) {
 	return a
 }
 
+// SetMap
+func (j *Json) SetMap(m map[string]interface{}) {
+	j.data=m
+}
+
+// GetKeys return keys
+func (j *Json) GetKeys() ([]string) {
+	mm,_:=j.Map()
+	var keys []string
+	for k, _ := range mm {
+		keys=append(keys,k)
+	}
+	return keys
+}
+
 func (j *Json) GetInt(key string, defaultV ...int) int {
 	var def int
 	
