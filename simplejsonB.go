@@ -9,7 +9,10 @@ import (
 
 // NewJsonFromStr returns a pointer to a new `Json` object
 func NewJsonFromStr(jsonStr string) (*Json) {
-	a, _ := NewJson([]byte(jsonStr))
+	a, err := NewJson([]byte(jsonStr))
+	if err!=nil{
+		log.Println(`NewJsonFromStr`,err,jsonStr)
+	}
 	return a
 }
 
@@ -24,7 +27,7 @@ func (j *Json) ToJsonStr() (string) {
 }
 
 func (j *Json) ToJsonStrPretty() (string) {
-	a, _ := json.MarshalIndent(&j.data,"","\t")
+	a, _ := json.MarshalIndent(&j.data, "", "\t")
 	return string(a)
 }
 
@@ -36,15 +39,18 @@ func (j *Json) M() (map[string]interface{}) {
 
 // SetMap
 func (j *Json) SetMap(m map[string]interface{}) {
-	j.data=m
+	j.data = m
 }
 
 // GetKeys return keys
 func (j *Json) GetKeys() ([]string) {
-	mm,_:=j.Map()
 	var keys []string
+	mm, err := j.Map()
+	if err != nil {
+		return keys
+	}
 	for k, _ := range mm {
-		keys=append(keys,k)
+		keys = append(keys, k)
 	}
 	return keys
 }
@@ -60,27 +66,27 @@ func (j *Json) GetInt(key string, defaultV ...int) int {
 		log.Panicf("too many arguments %d", len(defaultV))
 	}
 	
-	gj:=j.Get(key)
+	gj := j.Get(key)
 	
 	i, err := gj.Int()
 	if err == nil {
 		return i
 	}
 	
-	s,err:=gj.String()
-	if err==nil{
-		i,err:=strconv.Atoi(s)
-		if err==nil{
+	s, err := gj.String()
+	if err == nil {
+		i, err := strconv.Atoi(s)
+		if err == nil {
 			return i
 		}
-		f,err:=strconv.ParseFloat(s,64)
-		if err==nil{
+		f, err := strconv.ParseFloat(s, 64)
+		if err == nil {
 			return int(f)
 		}
 	}
 	
-	f,err:=gj.Float64()
-	if err==nil{
+	f, err := gj.Float64()
+	if err == nil {
 		return int(f)
 	}
 	
@@ -98,22 +104,22 @@ func (j *Json) GetString(key string, defaultV ...string) string {
 		log.Panicf("too many arguments %d", len(defaultV))
 	}
 	
-	gj:=j.Get(key)
+	gj := j.Get(key)
 	
 	s, err := gj.String()
 	if err == nil {
 		return s
 	}
 	
-	i,err:=gj.Int()
-	if err==nil{
-		s:=strconv.Itoa(i)
+	i, err := gj.Int()
+	if err == nil {
+		s := strconv.Itoa(i)
 		return s
 	}
 	
-	f,err:=gj.Float64()
-	if err==nil{
-		return fmt.Sprintf("%f",f)
+	f, err := gj.Float64()
+	if err == nil {
+		return fmt.Sprintf("%f", f)
 	}
 	
 	return def
@@ -130,23 +136,23 @@ func (j *Json) GetFloat(key string, defaultV ...float64) float64 {
 		log.Panicf("too many arguments %d", len(defaultV))
 	}
 	
-	gj:=j.Get(key)
+	gj := j.Get(key)
 	
-	f,err:=gj.Float64()
-	if err==nil{
+	f, err := gj.Float64()
+	if err == nil {
 		return f
 	}
 	
 	s, err := gj.String()
 	if err == nil {
-		f,err:= strconv.ParseFloat(s,64)
-		if err==nil {
+		f, err := strconv.ParseFloat(s, 64)
+		if err == nil {
 			return f
 		}
 	}
 	
-	i,err:=gj.Int()
-	if err==nil{
+	i, err := gj.Int()
+	if err == nil {
 		return float64(i)
 	}
 	
